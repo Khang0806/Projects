@@ -1,0 +1,73 @@
+---
+title: "Case Study 2"
+output: html_document
+date: "2026-03-04"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(dplyr)
+library(ggplot2)
+```
+
+```{r}
+df <- read.csv("D:/Seneca/Sem 4/BDB400 - Business Intelligence 1/Case Study 2/Case Study 2 Payroll Database Master.csv")
+df
+```
+```{r}
+male <- df %>% filter(Gender %in% ("Male"))
+nrow(male)
+Female <- df %>% filter(Gender %in% ("Female"))
+nrow(Female)
+```
+
+```{r}
+loa <- df %>%
+  filter(Leave.Reason %in% c("Maternity", "Sick", "LTD"))
+```
+
+```{r}
+loa_visualization <- ggplot(data = loa,
+                            mapping = aes(x=Leave.Reason,fill = Gender))
+loa_visualization + geom_bar(position = 'dodge') + labs(title = "Employees on leave: leave reason by gender",
+                                                    x = "Leave Reason",
+                                                    y= "Employees Leave")
+```
+
+
+```{r}
+loa_visualization2 <- ggplot(
+  data = loa,
+  aes(x = Leave.Reason, y = Age)
+)
+
+loa_visualization2 +
+  geom_boxplot(width = 0.2) +
+  labs(
+    title = "Employees on leave: age distribution by leave reason",
+    x = "Leave reason",
+    y = "Age"
+  ) +
+  theme_minimal()
+```
+                                                    
+
+```{r}
+df2 <- read.csv("D:/Seneca/Sem 4/BDB400 - Business Intelligence 1/Case Study 2/Case Study 2 Terminated Employee Database Master.csv")
+df2
+```
+                                                  
+```{r}
+retirement_compare <- df2 %>% filter(Termination.Reason %in% c("Early Retirement","Retirement")) %>% count(Fiscal.Year,Termination.Reason)
+
+retirement_plot <- ggplot(data = retirement_compare,
+                          mapping = aes(x = Fiscal.Year, y= n, color = Termination.Reason))
+retirement_plot + geom_line() +geom_point() +theme_minimal() + labs(title = "Retirement by Year",
+                                                                    y = "Number of retirements",
+                                                                    x = "Year")
+```
+                                                    
+                                                    
